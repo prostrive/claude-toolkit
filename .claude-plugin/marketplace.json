@@ -1,0 +1,18 @@
+{
+  "name": "claude-toolkit-marketplace",
+  "owner": {
+    "name": "Claude Toolkit"
+  },
+  "plugins": [
+    {
+      "name": "claude-toolkit-pm",
+      "source": "./claude-toolkit-pm",
+      "description": "Toolkit for product managers — PRD generation, effort estimation, and Linear ticket creation"
+    },
+    {
+      "name": "claude-toolkit-dev",
+      "source": "./claude-toolkit-dev",
+      "description": "Toolkit for developers — feature development, bug fixing, refactoring, testing, code review, security audits, and documentation"
+    }
+  ]
+}

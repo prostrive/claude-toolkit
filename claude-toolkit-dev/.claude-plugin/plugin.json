@@ -1,0 +1,8 @@
+{
+  "name": "claude-toolkit-dev",
+  "description": "Toolkit for developers — feature development, bug fixing, refactoring, testing, code review, security audits, and documentation",
+  "version": "1.0.0",
+  "author": {
+    "name": "Claude Toolkit"
+  }
+}

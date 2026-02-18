@@ -1,0 +1,8 @@
+{
+  "name": "claude-toolkit-pm",
+  "description": "Toolkit for product managers — PRD generation, effort estimation, and Linear ticket creation",
+  "version": "1.0.0",
+  "author": {
+    "name": "Claude Toolkit"
+  }
+}
