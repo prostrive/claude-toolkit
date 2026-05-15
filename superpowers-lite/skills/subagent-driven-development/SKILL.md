@@ -25,7 +25,7 @@ Execute plan by dispatching fresh subagent per task, with two-stage review after
 
 Even within the full lane, not every task needs both review stages. If ALL of these are true for a given task in the plan:
 
-- Touches ≤2 files
+- Touches a small, self-contained area (one component / endpoint / module) — typically a handful of files
 - The plan's task spec has a concrete test included
 - The change is mechanical (no architectural judgment)
 

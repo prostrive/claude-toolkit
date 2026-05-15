@@ -151,6 +151,35 @@ Tests passing (<N> tests, 0 failures)
 Ready to implement <feature-name>
 ```
 
+## Step 5: Cleanup After PR
+
+Once a PR has been opened for the work in this worktree, the worktree is no longer load-bearing — the branch is on the remote and tracked in the PR. Clean up to avoid stale worktrees piling up.
+
+**Before removing**, confirm nothing is uncommitted or unpushed:
+
+```bash
+git status                            # working tree clean?
+git log --branches --not --remotes    # any local commits not pushed?
+```
+
+**Then remove from outside the worktree** (you can't remove the one you're standing in):
+
+```bash
+cd "$(git rev-parse --git-common-dir)/.."   # navigate to the main worktree
+git worktree remove <worktree-path>
+```
+
+If a native worktree tool was used to create the worktree (e.g. `EnterWorktree`), prefer its matching exit/remove command rather than raw git — let the harness manage its own state.
+
+**Optionally delete the branch** if the PR was merged or abandoned:
+
+```bash
+git branch -d <branch-name>   # safe delete, only if merged into base
+git branch -D <branch-name>   # force delete (abandoned PRs)
+```
+
+**Don't clean up if:** the PR has unaddressed review feedback you're still iterating on, more commits are coming, or you don't yet have confirmation the work is on the remote.
+
 ## Quick Reference
 
 | Situation | Action |
@@ -168,6 +197,8 @@ Ready to implement <feature-name>
 | Permission error on create | Sandbox fallback, work in place |
 | Tests fail during baseline | Report failures + ask |
 | No package.json/Cargo.toml | Skip dependency install |
+| PR opened on this worktree | Step 5 cleanup once nothing is uncommitted/unpushed |
+| PR merged | Remove worktree; optionally `git branch -d` |
 
 ## Common Mistakes
 

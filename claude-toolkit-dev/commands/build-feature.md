@@ -20,27 +20,6 @@ If it's vague, ask:
 
 Do not proceed until you and the user agree on what's being built.
 
-### Size Check — should this be `/quick-task` instead?
-
-Once the ask is clear, do a quick size check before sinking time into the heavy exploration + architecture phases. `/build-feature` dispatches up to 8 subagents (2-3 explorers, 2-3 architects, 3 reviewers) — that's the right tool for real features, but expensive for small contained work.
-
-This is `/quick-task` work if ALL of these are true:
-
-- Touches ≤2 files (or a single self-contained component / endpoint / page)
-- No public API contract change, no schema / migration change
-- No new infrastructure, no new dependency
-- No cross-service coordination
-
-If it looks like quick-task work, tell the user:
-
-> "This sounds like contained work — `/quick-task` would be faster and skip the architecture/review subagent passes. Want me to switch, or proceed with the full `/build-feature` flow anyway?"
-
-Wait for the user's answer. They may have a reason to prefer the full flow (e.g. they want the parallel architect proposals as a design exercise). User's call wins.
-
-If they pick `/quick-task` — stop this command and tell them to re-invoke with `/quick-task`. Do not silently bypass phases in `/build-feature`; the lane is explicit, not internal.
-
-If they pick to continue with the full flow, proceed to Phase 2.
-
 ## Phase 2: Codebase Exploration
 
 **Goal:** Understand the existing code before touching anything.

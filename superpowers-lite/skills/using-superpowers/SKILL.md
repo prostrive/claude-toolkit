@@ -20,7 +20,7 @@ This is not negotiable. This is not optional. You cannot rationalize your way ou
 Before invoking any other skill, classify the user's request into one of two lanes. Announce the lane explicitly: **"Lane: fast"** or **"Lane: full"**.
 
 **Fast lane** — pick this when ALL of the following are true:
-- Touches ≤2 files (or is a single self-contained file/component)
+- Touches a small, self-contained area of the codebase (one component / endpoint / page / module) — typically ≤4 files, but use judgment rather than a hard count
 - No public API change, no data-model / schema / migration change
 - No new infrastructure, no new dependency
 - No cross-service coordination

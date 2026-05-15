@@ -1,13 +1,13 @@
 # Claude Toolkit
 
-A Claude Code plugin marketplace with three plugins — one for PMs, one for developers, and a lighter fork of the superpowers methodology.
+A Claude Code plugin marketplace. Currently registers `superpowers-lite` (a fork of [obra/superpowers](https://github.com/obra/superpowers) with a fast/full lane decision so small tasks skip the heavyweight planning ceremony). The `claude-toolkit-pm/` and `claude-toolkit-dev/` folders remain on disk as unregistered legacy and can be re-registered if needed.
 
 ## Structure
 
 - `.claude-plugin/marketplace.json` — marketplace manifest
-- `claude-toolkit-pm/` — plugin for product managers
-- `claude-toolkit-dev/` — plugin for developers
-- `superpowers-lite/` — fork of [obra/superpowers](https://github.com/obra/superpowers) with a fast/full lane decision so small tasks skip the heavyweight planning ceremony (see `superpowers-lite/CHANGES.md`)
+- `superpowers-lite/` — registered plugin (the active superpowers fork)
+- `claude-toolkit-pm/` — unregistered legacy folder (commands for PRD generation, estimation, ticketing)
+- `claude-toolkit-dev/` — unregistered legacy folder (commands for feature work, debugging, refactoring, etc., plus the 3 dev agents)
 
 ## Plugin: claude-toolkit-pm
 
@@ -22,8 +22,7 @@ A Claude Code plugin marketplace with three plugins — one for PMs, one for dev
 ## Plugin: claude-toolkit-dev
 
 ### Commands
-- `/build-feature` — Guided feature development: explore, clarify, design, implement, review (uses all 3 agents, up to 8 subagent dispatches). Phase 1 routes to `/quick-task` if the work looks contained.
-- `/quick-task` — Lightweight workflow for small contained changes (single endpoint, simple CRUD, contained UI, small refactor). No subagent fleet, no architecture phase, no multi-stage review. Use when the change touches ≤2 files with no API/schema/infra change.
+- `/build-feature` — Guided feature development: explore, clarify, design, implement, review (uses all 3 agents)
 - `/fix-bug` — Systematic debugging: trace root cause, implement fix, verify
 - `/refactor` — Analyze code smells, plan refactoring, execute safely
 - `/write-tests` — Generate meaningful tests matching project conventions
@@ -32,8 +31,6 @@ A Claude Code plugin marketplace with three plugins — one for PMs, one for dev
 - `/generate-docs` — Generate comprehensive technical documentation
 - `/onboard` — Generate a developer onboarding guide
 - `/setup-mcp` — Install standard MCP servers globally
-
-**Picking between `/build-feature` and `/quick-task`:** `/quick-task` is the explicit fast lane for contained work. `/build-feature` is for real features (multi-file, API/schema changes, cross-service work). If you reach for `/build-feature` by reflex on a small task, Phase 1 will offer to switch you over.
 
 ### Skills
 - `code-review` — Professional code review standards for production delivery
@@ -45,9 +42,7 @@ A Claude Code plugin marketplace with three plugins — one for PMs, one for dev
 
 ## Plugin: superpowers-lite
 
-Fork of `obra/superpowers` v5.1.0. Same 14 skills, same SessionStart-hook injection model, plus a **lane decision** in `using-superpowers` that classifies each task as fast or full. Full lane is bit-for-bit upstream behavior. Fast lane collapses ceremony for tasks that touch ≤2 files with no API/schema change.
-
-See `superpowers-lite/CHANGES.md` for the exact divergence and merge strategy for future upstream updates.
+Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model, plus a **lane decision** in `using-superpowers` that classifies each task as fast or full. Full lane is bit-for-bit upstream behavior. Fast lane collapses ceremony for small, self-contained changes (no API/schema/infra change, contained blast radius).
 
 ## Development
 
