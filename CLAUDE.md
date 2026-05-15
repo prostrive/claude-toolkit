@@ -22,7 +22,8 @@ A Claude Code plugin marketplace with three plugins — one for PMs, one for dev
 ## Plugin: claude-toolkit-dev
 
 ### Commands
-- `/build-feature` — Guided feature development: explore, clarify, design, implement, review (uses all 3 agents)
+- `/build-feature` — Guided feature development: explore, clarify, design, implement, review (uses all 3 agents, up to 8 subagent dispatches). Phase 1 routes to `/quick-task` if the work looks contained.
+- `/quick-task` — Lightweight workflow for small contained changes (single endpoint, simple CRUD, contained UI, small refactor). No subagent fleet, no architecture phase, no multi-stage review. Use when the change touches ≤2 files with no API/schema/infra change.
 - `/fix-bug` — Systematic debugging: trace root cause, implement fix, verify
 - `/refactor` — Analyze code smells, plan refactoring, execute safely
 - `/write-tests` — Generate meaningful tests matching project conventions
@@ -31,6 +32,8 @@ A Claude Code plugin marketplace with three plugins — one for PMs, one for dev
 - `/generate-docs` — Generate comprehensive technical documentation
 - `/onboard` — Generate a developer onboarding guide
 - `/setup-mcp` — Install standard MCP servers globally
+
+**Picking between `/build-feature` and `/quick-task`:** `/quick-task` is the explicit fast lane for contained work. `/build-feature` is for real features (multi-file, API/schema changes, cross-service work). If you reach for `/build-feature` by reflex on a small task, Phase 1 will offer to switch you over.
 
 ### Skills
 - `code-review` — Professional code review standards for production delivery
