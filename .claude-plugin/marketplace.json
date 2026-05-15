@@ -13,6 +13,11 @@
       "name": "claude-toolkit-dev",
       "source": "./claude-toolkit-dev",
       "description": "Toolkit for developers — feature development, bug fixing, refactoring, testing, code review, security audits, and documentation"
+    },
+    {
+      "name": "superpowers-lite",
+      "source": "./superpowers-lite",
+      "description": "Lighter fork of obra/superpowers — adds a fast/full lane decision so small tasks skip the heavyweight design-doc + plan-doc + multi-subagent ceremony"
     }
   ]
 }

@@ -1,12 +1,13 @@
 # Claude Toolkit
 
-A Claude Code plugin marketplace with two plugins — one for PMs, one for developers.
+A Claude Code plugin marketplace with three plugins — one for PMs, one for developers, and a lighter fork of the superpowers methodology.
 
 ## Structure
 
 - `.claude-plugin/marketplace.json` — marketplace manifest
 - `claude-toolkit-pm/` — plugin for product managers
 - `claude-toolkit-dev/` — plugin for developers
+- `superpowers-lite/` — fork of [obra/superpowers](https://github.com/obra/superpowers) with a fast/full lane decision so small tasks skip the heavyweight planning ceremony (see `superpowers-lite/CHANGES.md`)
 
 ## Plugin: claude-toolkit-pm
 
@@ -38,6 +39,12 @@ A Claude Code plugin marketplace with two plugins — one for PMs, one for devel
 - `code-explorer` — Deep codebase analysis, traces execution paths and maps architecture
 - `code-architect` — Designs implementation blueprints aligned with existing patterns
 - `code-reviewer` — Examines code for bugs, security issues, and convention violations
+
+## Plugin: superpowers-lite
+
+Fork of `obra/superpowers` v5.1.0. Same 14 skills, same SessionStart-hook injection model, plus a **lane decision** in `using-superpowers` that classifies each task as fast or full. Full lane is bit-for-bit upstream behavior. Fast lane collapses ceremony for tasks that touch ≤2 files with no API/schema change.
+
+See `superpowers-lite/CHANGES.md` for the exact divergence and merge strategy for future upstream updates.
 
 ## Development
 

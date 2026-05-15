@@ -1,0 +1,15 @@
+{
+  "name": "superpowers-lite",
+  "description": "A lighter fork of Jesse Vincent's superpowers — same skills, fast-path lane for small/medium tasks to cut planning-cycle overhead",
+  "version": "0.1.0",
+  "author": {
+    "name": "Claude Toolkit"
+  },
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "tdd",
+    "workflows",
+    "fast-path"
+  ]
+}
