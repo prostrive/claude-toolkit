@@ -1,12 +1,13 @@
 # Claude Toolkit
 
-A Claude Code plugin marketplace with two plugins — one for PMs, one for developers.
+A Claude Code plugin marketplace. Currently registers `superpowers-lite` (a fork of [obra/superpowers](https://github.com/obra/superpowers) with a fast/full lane decision so small tasks skip the heavyweight planning ceremony). The `claude-toolkit-pm/` and `claude-toolkit-dev/` folders remain on disk as unregistered legacy and can be re-registered if needed.
 
 ## Structure
 
 - `.claude-plugin/marketplace.json` — marketplace manifest
-- `claude-toolkit-pm/` — plugin for product managers
-- `claude-toolkit-dev/` — plugin for developers
+- `superpowers-lite/` — registered plugin (the active superpowers fork)
+- `claude-toolkit-pm/` — unregistered legacy folder (commands for PRD generation, estimation, ticketing)
+- `claude-toolkit-dev/` — unregistered legacy folder (commands for feature work, debugging, refactoring, etc., plus the 3 dev agents)
 
 ## Plugin: claude-toolkit-pm
 
@@ -38,6 +39,10 @@ A Claude Code plugin marketplace with two plugins — one for PMs, one for devel
 - `code-explorer` — Deep codebase analysis, traces execution paths and maps architecture
 - `code-architect` — Designs implementation blueprints aligned with existing patterns
 - `code-reviewer` — Examines code for bugs, security issues, and convention violations
+
+## Plugin: superpowers-lite
+
+Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model, plus a **lane decision** in `using-superpowers` that classifies each task as fast or full. Full lane is bit-for-bit upstream behavior. Fast lane collapses ceremony for small, self-contained changes (no API/schema/infra change, contained blast radius).
 
 ## Development
 
