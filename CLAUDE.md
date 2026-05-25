@@ -1,6 +1,6 @@
 # Claude Toolkit
 
-A Claude Code plugin marketplace. Currently registers `superpowers-lite` (a fork of [obra/superpowers](https://github.com/obra/superpowers) with a fast/full lane decision so small tasks skip the heavyweight planning ceremony). The `claude-toolkit-pm/` and `claude-toolkit-dev/` folders remain on disk as unregistered legacy and can be re-registered if needed.
+A Claude Code plugin marketplace. Currently registers `superpowers-lite` (a fork of [obra/superpowers](https://github.com/obra/superpowers) with a developer-picked fast/middle/full lane so each task gets right-sized planning ceremony). The `claude-toolkit-pm/` and `claude-toolkit-dev/` folders remain on disk as unregistered legacy and can be re-registered if needed.
 
 ## Structure
 
@@ -42,7 +42,13 @@ A Claude Code plugin marketplace. Currently registers `superpowers-lite` (a fork
 
 ## Plugin: superpowers-lite
 
-Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model, plus a **lane decision** in `using-superpowers` that classifies each task as fast or full. Full lane is bit-for-bit upstream behavior. Fast lane collapses ceremony for small, self-contained changes (no API/schema/infra change, contained blast radius).
+Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model, plus a **three-lane decision** in `using-superpowers`. The developer picks the lane via AskUserQuestion at the start of each task — the AI does not classify:
+
+- **Full lane** — bit-for-bit upstream behavior: design-first brainstorm + spec doc + full plan doc + per-task two-stage subagent review. Use for new dependencies, new infra, real architectural decisions, post-launch breaking changes, RFC-class work.
+- **Middle lane** — short committed plan doc, no brainstorm/spec, optional implementer subagent, single combined reviewer pass at end. Use for medium refactors, multi-file bug fixes, features that slot into existing patterns, internal API changes, dep upgrades, perf fixes, pre-launch schema/API changes.
+- **Fast lane** — mini-brainstorm, TodoWrite plan, inline implementation, no subagents. Use for ≤~4-file self-contained changes (copy, styling, single-function fix, config flip).
+
+All three lanes keep TDD and verification-before-completion mandatory. Lane reclassification mid-task goes back through AskUserQuestion.
 
 ## Development
 

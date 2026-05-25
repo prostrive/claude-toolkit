@@ -28,11 +28,11 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 Thinking "skip TDD just this once"? Stop. That's rationalization.
 
-## Fast-Lane Exceptions (superpowers-lite)
+## Fast-Lane and Middle-Lane Exceptions (superpowers-lite)
 
-In the **fast lane** (set by `using-superpowers`), TDD remains mandatory for anything that contains behavior. The fast lane is about removing planning ceremony, not removing tests.
+In the **fast lane** and **middle lane** (set by `using-superpowers`), TDD remains mandatory for anything that contains behavior. These lanes are about removing planning ceremony, not removing tests.
 
-Fast-lane work may skip a test-first pass — without asking the human partner — for these specific categories where a test would have no real signal:
+Fast-lane and middle-lane work may skip a test-first pass — without asking the human partner — for these specific categories where a test would have no real signal:
 
 - **Pure configuration changes** — flipping a flag, changing a value in YAML/TOML/JSON, updating an env-var default. (If a test would just assert "the file contains X", skip it.)
 - **Copy / string changes** — user-facing text, error messages, labels, button copy. (Manual UI check or visual review is sufficient.)
@@ -40,9 +40,9 @@ Fast-lane work may skip a test-first pass — without asking the human partner �
 - **Trivial renames inside one module** — local variable or private function rename with no external callers; the type-checker is proof of correctness.
 - **Purely declarative database migrations** — adding a column with a default, adding an index. (Run the migration locally + the existing test suite is the review.)
 
-For ANY change that contains conditional logic, transforms data, validates input, or produces output a user sees as a result of computation — **TDD is mandatory regardless of lane**. A "fast lane" bug fix in a date parser still gets a failing test first.
+For ANY change that contains conditional logic, transforms data, validates input, or produces output a user sees as a result of computation — **TDD is mandatory regardless of lane**. A fast-lane or middle-lane bug fix in a date parser still gets a failing test first.
 
-These are the only fast-lane exceptions. "It's a one-liner" is not on the list. "I'll add the test after" is not on the list. If you're unsure whether a change qualifies, write the test.
+These are the only exceptions. "It's a one-liner" is not on the list. "I'll add the test after" is not on the list. If you're unsure whether a change qualifies, write the test.
 
 ## The Iron Law
 

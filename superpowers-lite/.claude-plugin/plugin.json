@@ -1,6 +1,6 @@
 {
   "name": "superpowers-lite",
-  "description": "A lighter fork of Jesse Vincent's superpowers — same skills, fast-path lane for small/medium tasks to cut planning-cycle overhead",
+  "description": "A lighter fork of Jesse Vincent's superpowers — same skills, with a fast/middle/full lane chosen by the developer to right-size planning ceremony per task",
   "version": "0.1.0",
   "author": {
     "name": "Claude Toolkit"
