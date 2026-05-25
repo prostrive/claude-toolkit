@@ -1,25 +1,47 @@
 ---
 name: subagent-driven-development
-description: Use when executing FULL-LANE implementation plans with independent tasks in the current session. Fast-lane work does not use this skill.
+description: Use when executing FULL-LANE or MIDDLE-LANE implementation plans with independent tasks in the current session. Fast-lane work does not use this skill.
 ---
 
 # Subagent-Driven Development
 
 ## Lane Branch (superpowers-lite)
 
-**Full lane (default):** the full subagent-driven workflow below — fresh subagent per task, two-stage review (spec compliance, then code quality), final review across the whole implementation.
+**Full lane:** the full subagent-driven workflow below — fresh subagent per task, two-stage review (spec compliance, then code quality), final review across the whole implementation.
+
+**Middle lane:** **optional and reduced.** Use a single implementer subagent only when the short plan has 8+ mechanical steps and dispatching saves the controller's context window — otherwise implement inline. When the implementation is complete (inline or via subagent), dispatch **one combined reviewer subagent** against the whole change as the single end-of-change review. See the **Middle-Lane Mode** section below.
 
 **Fast lane:** **do not invoke this skill at all.** Fast-lane work is inline implementation by the main session — no implementer subagent, no spec reviewer, no code-quality reviewer. The fast lane runs `verification-before-completion` at the end and that is the review. Dispatching three subagents for a one-file change is the exact overhead this fork is trying to remove.
 
 If the plan you're executing came from the fast-lane `writing-plans` path (TodoWrite, not a committed plan doc), you are in the wrong skill — just execute the TodoWrite directly.
 
-If the plan came from the full-lane `writing-plans` path (committed plan doc), continue below.
+If the plan came from the middle-lane `writing-plans` path (one-screen committed short plan), jump to the **Middle-Lane Mode** section below.
+
+If the plan came from the full-lane `writing-plans` path (full committed plan doc with code per step), continue below.
 
 Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
 
 **Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history — you construct exactly what they need. This also preserves your own context for coordination work.
 
 **Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
+
+## Middle-Lane Mode (superpowers-lite)
+
+Use this when the plan came from `writing-plans` middle-lane (one-screen short plan doc, no per-step pre-written code).
+
+**Implementer dispatch is optional.** Decide based on the short plan:
+- **Inline (default for ≤8 steps):** work the plan in the main session. Read → write test → implement → run tests → commit → next step.
+- **Single implementer subagent (for 8+ mechanical steps):** dispatch one fresh implementer with the short plan doc and the task description. Do not split the plan across multiple implementer subagents — middle-lane plans are small enough to fit one dispatch. Implementer reports DONE / DONE_WITH_CONCERNS / NEEDS_CONTEXT / BLOCKED.
+
+**Reviewer dispatch is mandatory.** After all steps complete and tests pass (whether implementation was inline or via subagent), dispatch **one combined reviewer subagent** that checks both spec compliance and code quality against the whole change in a single pass. Use `./spec-reviewer-prompt.md` extended with the code-quality criteria from `./code-quality-reviewer-prompt.md`, or invoke both back-to-back in the same subagent dispatch — the goal is one reviewer dispatch, not two.
+
+**No per-task review loop.** Middle-lane plans have settled designs and small blast radius; per-task two-stage review costs more than it returns. The end-of-change reviewer pass is the only review checkpoint.
+
+**No separate final reviewer.** The single end-of-change reviewer IS the final reviewer.
+
+**Fix and re-review.** If the reviewer flags issues, fix them in the main session (or re-dispatch the implementer subagent), then re-run the reviewer. Don't skip the re-review.
+
+Total subagent footprint: **1 dispatch (inline) or 2 dispatches (with implementer subagent)** for the whole change, versus 3-per-task + 1-at-the-end in full lane.
 
 ## Reduced-Ceremony Mode (medium-sized full-lane work)
 

@@ -1,17 +1,19 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code. Branches on the fast/full lane from using-superpowers.
+description: Use when you have a spec or requirements for a multi-step task, before touching code. Branches on the fast/middle/full lane from using-superpowers.
 ---
 
 # Writing Plans
 
 ## Lane Branch (superpowers-lite)
 
-**Full lane (default):** the full plan-doc workflow below — committed plan in `docs/superpowers/plans/`, complete code in every step, self-review pass, two execution-path options.
+**Full lane:** the full plan-doc workflow below — committed plan in `docs/superpowers/plans/`, complete code in every step, self-review pass, two execution-path options.
+
+**Middle lane:** the **Middle-Lane Short Plan** section at the bottom of this skill — one-screen committed plan doc, no per-step pre-written code, no self-review loop, no execution-path question. Single reviewer pass runs at the end of the whole change, not per-task.
 
 **Fast lane:** skip the committed plan doc entirely. Use the **Fast-Lane TodoWrite Plan** section at the bottom of this skill — an in-conversation TodoWrite list, no markdown file, no self-review loop. Implementation begins immediately after the TodoWrite is created.
 
-If `using-superpowers` did not set a lane, treat the task as full lane.
+If `using-superpowers` did not set a lane, return to `using-superpowers` and have the user pick. Do not pick yourself.
 
 ## Overview
 
@@ -25,6 +27,7 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 
 **Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
 - (User preferences for plan location override this default)
+- (Middle lane: still save here, but use the short-plan structure — see bottom of skill)
 - (Fast lane: skip this — use a TodoWrite list instead, see bottom of skill)
 
 ## Scope Check
@@ -162,6 +165,74 @@ After saving the plan, offer execution choice:
 
 ---
 
+## Middle-Lane Short Plan (superpowers-lite)
+
+Use this when `using-superpowers` selected the middle lane. The change is multi-step and worth writing down, but the design is settled and full plan-doc ceremony costs more than it returns.
+
+### Process
+
+1. **Quick context scan** — read the file(s) the task touches and any callers that affect the change. Skip broad project-wide exploration unless the call graph requires it.
+
+2. **Ask any genuinely needed clarifying questions** — middle lane skipped brainstorming, so this is your one chance. Batch them in one consolidated message via AskUserQuestion. Skip entirely if you have no real uncertainty.
+
+3. **Write a one-screen plan doc** to `docs/superpowers/plans/YYYY-MM-DD-<topic>-plan.md`. Commit it. Structure:
+
+```markdown
+# [Feature/Change Name] Short Plan (middle lane)
+
+**Goal:** [one sentence]
+
+**Files to touch:**
+- `path/to/file-a.ts` — [1-line responsibility]
+- `path/to/file-b.ts` — [1-line responsibility]
+- `tests/path/file-a.test.ts` — [what it tests]
+
+**Steps:**
+1. Read `file-a.ts` and its callers
+2. Write failing test for [behavior] in `tests/path/file-a.test.ts`
+3. Implement change in `file-a.ts`
+4. Run tests, fix until green
+5. Apply [follow-on] in `file-b.ts`
+6. Run full test suite + lint/typecheck
+7. Commit
+8. Dispatch end-of-change reviewer subagent (see subagent-driven-development middle-lane mode)
+
+**Test:** [the test or tests that cover this change — concrete enough that a reviewer can find them]
+```
+
+Typical middle-lane plans are 5–15 steps.
+
+4. **No pre-written code in the plan.** You don't need to ship the code in the plan because you're about to write it for real. Keep the plan to file paths, step descriptions, and the testing story.
+
+5. **No self-review pass. No execution-path choice presented to the user.** The user already picked middle lane; the plan is the plan.
+
+6. **Execute the plan.** Two options at your discretion (no need to ask the user):
+   - **Inline in the main session** — work through the steps, commit after passing tests.
+   - **Subagent implementer** — dispatch a single fresh implementer subagent with the plan and the task. Pick this when the plan has 8+ mechanical steps and dispatching saves your context window. See `subagent-driven-development` middle-lane mode.
+
+7. **Single combined reviewer pass at the end.** After all steps complete and tests pass, dispatch one reviewer subagent that checks both spec compliance and code quality against the whole change. Fix anything it flags. No per-task two-stage review. This single pass is the only review checkpoint — skipping it means no review.
+
+### When to bail out of the middle lane
+
+If during plan writing or execution you find any of these, STOP and ask the user (via AskUserQuestion) whether to reclassify to full lane:
+
+- A genuine design fork emerges (two viable architectures with different long-term implications)
+- A new dependency or new piece of infrastructure is required
+- The change crosses a service or team boundary
+- The change touches a public API or schema **and the project is post-launch** (pre-launch stays middle)
+- The plan grows past ~15 steps or starts touching files you didn't expect
+
+Don't silently escalate ceremony, and don't silently push through with under-ceremony.
+
+### What stays mandatory
+
+- **TDD** (with the same exceptions as fast lane — see `test-driven-development`).
+- **Verification before completion.** Run the tests, run lint/typecheck, confirm the change works.
+- **Commits.** Frequent commits, not one big commit at the end.
+- **The end-of-change reviewer pass.** It's the only review you get.
+
+---
+
 ## Fast-Lane TodoWrite Plan (superpowers-lite)
 
 Use this when `using-superpowers` selected the fast lane. The committed plan doc is overkill when the entire change fits on a single screen.
@@ -183,7 +254,7 @@ Use this when `using-superpowers` selected the fast lane. The committed plan doc
 
 ### When to bail out of the fast lane
 
-If while writing the TodoWrite you find yourself with more than ~8 todos, or you notice the change is touching files you didn't expect, STOP. The task is bigger than fast-lane work. Re-enter `using-superpowers`, reclassify to full lane, and run the full `writing-plans` flow.
+If while writing the TodoWrite you find yourself with more than ~8 todos, or you notice the change is touching files you didn't expect, STOP. The task is bigger than fast-lane work. Ask the user via AskUserQuestion whether to reclassify to middle or full lane — do not pick yourself.
 
 ### What stays mandatory
 

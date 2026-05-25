@@ -32,7 +32,7 @@ escape_for_json() {
 
 using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
-session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers (lite).\n\nThis is the superpowers-lite fork: same skills as upstream, plus a fast/full lane decision in using-superpowers that lets small tasks skip the heavyweight planning ceremony.\n\n**Below is the full content of your 'superpowers-lite:using-superpowers' skill - your introduction to using skills, including the lane decision you MUST make before invoking any other skill. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\nYou have superpowers (lite).\n\nThis is the superpowers-lite fork: same skills as upstream, plus a developer-picked fast/middle/full lane decision in using-superpowers. The developer picks the lane via AskUserQuestion — you do NOT classify.\n\n**Below is the full content of your 'superpowers-lite:using-superpowers' skill - your introduction to using skills, including the lane decision the developer MUST make before you invoke any other skill. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).

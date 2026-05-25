@@ -7,7 +7,7 @@
     {
       "name": "superpowers-lite",
       "source": "./superpowers-lite",
-      "description": "Lighter fork of obra/superpowers — adds a fast/full lane decision so small tasks skip the heavyweight design-doc + plan-doc + multi-subagent ceremony"
+      "description": "Lighter fork of obra/superpowers — adds a developer-picked fast/middle/full lane so each task gets right-sized planning ceremony, from inline TodoWrite to full design-doc + plan-doc + multi-subagent review"
     }
   ]
 }

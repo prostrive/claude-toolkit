@@ -1,6 +1,6 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, picks the fast or full lane based on task size, and requires Skill tool invocation before ANY response including clarifying questions
+description: Use when starting any conversation - establishes how to find and use skills, asks the user which lane (fast/middle/full) to run in, and requires Skill tool invocation before ANY response including clarifying questions
 ---
 
 <SUBAGENT-STOP>
@@ -17,30 +17,59 @@ This is not negotiable. This is not optional. You cannot rationalize your way ou
 
 ## Lane Decision (superpowers-lite)
 
-Before invoking any other skill, classify the user's request into one of two lanes. Announce the lane explicitly: **"Lane: fast"** or **"Lane: full"**.
+Before invoking any other skill on a new implementation task, **ask the user which lane to use** via the AskUserQuestion tool. Do NOT classify the lane yourself. Announce the lane the user picks explicitly: **"Lane: fast"**, **"Lane: middle"**, or **"Lane: full"**.
 
-**Fast lane** — pick this when ALL of the following are true:
-- Touches a small, self-contained area of the codebase (one component / endpoint / page / module) — typically ≤4 files, but use judgment rather than a hard count
-- No public API change, no data-model / schema / migration change
-- No new infrastructure, no new dependency
-- No cross-service coordination
+**Skip the ask only when:**
+- The user's message already declares the lane explicitly ("fast lane", "middle lane", "full lane", "just do it" = fast, "let's plan this properly" = full)
+- A lane is already set for the current task from a prior turn in the same conversation
 
-Typical examples: copy edits, styling tweaks, single-function bug fix, config change, small refactor of one file, adding a missing log line, renaming inside one module.
+In all other cases, ask. The cost of one extra question is seconds; the cost of working in the wrong lane is hours.
 
-**Full lane** — pick this when ANY of these are true:
-- Multiple files / modules / services
-- API, schema, or migration changes
-- New external dependency or infrastructure
-- Cross-team or cross-service coordination
-- User asked for a design doc, an RFC, or "let's plan this out"
+This decision is the developer's, not yours. Do not infer a lane from file counts, ticket presence, or task wording.
 
-Typical examples: new feature in a user story, anything with a Linear/Jira ticket attached, anything labeled "feature" or "story".
+### The three lanes
 
-**If genuinely unsure → default to full lane.** The cost of over-planning a small task is minutes; the cost of under-planning a real feature is hours.
+**Fast lane** — drop nearly all ceremony. Typical use:
+- ≤~4 files, self-contained
+- Copy edits, styling tweaks, single-function bug fix, config flips, missing log line, rename inside one module
+- No API/schema/infra change, no design judgment needed
+- See `brainstorming` Fast-Lane Mini-Brainstorm and `writing-plans` Fast-Lane TodoWrite Plan
 
-**The user can override the lane at any time** ("just do it", "skip the plan", or conversely "let's plan this properly"). User instructions always win.
+**Middle lane** — short plan, no design ceremony, single review at the end. Typical use:
+- Medium refactor inside one module/service (5–15 files), no API leaving the module
+- Bug fix spanning 2–3 files (e.g., a race condition fixed across a small graph)
+- New feature that slots into existing patterns — CLI subcommand, admin page, endpoint mirroring an existing one
+- Internal API change touching 5–10 internal call sites
+- Dependency upgrade requiring multi-site migration
+- Performance fix (caching, indexing, query rewrite) across a few files
+- Design-system / copy sweep across many files when a written plan helps
+- Test coverage / test infrastructure refactor
+- New component/page on existing infra
+- **Pre-launch schema or public-API changes** — with no live consumers, design ceremony doesn't yet pay off. Once the project is live, these move to full lane.
+- Tickets labeled feature/story when the change still slots into existing patterns (ticket presence alone does not push to full lane)
 
-Once the lane is picked, downstream skills (`brainstorming`, `writing-plans`, `subagent-driven-development`, `test-driven-development`) read the lane and adjust their behavior. The full lane is bit-for-bit the upstream superpowers methodology. The fast lane collapses ceremony for tasks where it isn't worth it.
+Middle lane writes a short committed plan doc, skips brainstorming/spec, and runs a single reviewer-subagent pass at the end. Subagent implementers are optional — use them if they speed up multi-file work, skip them for inline coding.
+
+**Full lane** — design + plan + per-task review. Use for:
+- New dependency or new piece of infrastructure
+- Genuine architectural decisions with real trade-offs (design forks where two paths have different long-term implications)
+- Cross-service or cross-team coordination
+- Post-launch breaking changes to public APIs or schemas
+- User explicitly asks for a design doc, RFC, or "let's plan this out"
+
+Full lane is bit-for-bit the upstream superpowers methodology.
+
+### Picking the lane
+
+When a new implementation task arrives and no lane is set, before invoking any other skill, call AskUserQuestion with three options (fast / middle / full). Use one-line summaries drawn from the use-cases above. Wait for the answer, announce the lane, and proceed. Do not pick yourself if the user is available to pick.
+
+### Reclassifying
+
+The user can switch lanes at any time ("switch to middle", "this is bigger than I thought, let's do full"). Honor the switch immediately.
+
+If during work you discover the task is bigger than the picked lane (hidden complexity, design fork emerges, new dependency surfaces), STOP and ask the user whether to reclassify via AskUserQuestion. Don't silently escalate ceremony, and don't silently push through with an under-ceremonious lane.
+
+Downstream skills (`brainstorming`, `writing-plans`, `subagent-driven-development`, `test-driven-development`) read the lane and adjust their behavior.
 
 ## Instruction Priority
 

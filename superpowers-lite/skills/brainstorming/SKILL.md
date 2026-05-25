@@ -1,21 +1,24 @@
 ---
 name: brainstorming
-description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation. Branches on the fast/full lane from using-superpowers."
+description: "You MUST use this before any creative work - creating features, building components, adding functionality, or modifying behavior. Explores user intent, requirements and design before implementation. Branches on the fast/middle/full lane from using-superpowers."
 ---
 
 # Brainstorming Ideas Into Designs
 
 Help turn ideas into fully formed designs and specs through natural collaborative dialogue.
 
-This skill has **two modes** controlled by the lane decision from `using-superpowers`:
+This skill has **three lane modes** controlled by the lane decision from `using-superpowers`:
 
-- **Full lane** (default): the full design-first workflow below — one question at a time, design sections with per-section approval, committed spec doc, spec self-review, user review gate.
+- **Full lane**: the full design-first workflow below — one question at a time, design sections with per-section approval, committed spec doc, spec self-review, user review gate.
+- **Middle lane**: **skip this skill entirely.** Middle-lane tasks slot into existing patterns and have no design fork to argue. Go directly to `writing-plans` (its Middle-Lane Short Plan path will handle any clarifying questions). If a real design fork surfaces mid-work — two viable architectures with different long-term implications, a new dependency, new infrastructure — STOP and ask the user to reclassify to full lane.
 - **Fast lane**: the **Fast-Lane Mini-Brainstorm** at the bottom of this skill — one consolidated message with any clarifying questions and a proposed approach, inline approval, no spec doc.
 
-If `using-superpowers` did not set a lane, treat the task as full lane.
+If `using-superpowers` did not set a lane, return to `using-superpowers` and have the user pick. Do not pick yourself.
 
 <HARD-GATE>
 **Full lane:** Do NOT invoke any implementation skill, write any code, scaffold any project, or take any implementation action until you have presented a design and the user has approved it. This applies to EVERY full-lane project regardless of perceived simplicity.
+
+**Middle lane:** Do not run brainstorming. Invoke `writing-plans` directly.
 
 **Fast lane:** Run the Fast-Lane Mini-Brainstorm. Implementation begins after a single inline approval from the user. No committed spec doc.
 </HARD-GATE>
@@ -24,7 +27,9 @@ If `using-superpowers` did not set a lane, treat the task as full lane.
 
 **Full lane:** Every project goes through this process. A todo list, a single-function utility, a config change — all of them. "Simple" projects are where unexamined assumptions cause the most wasted work. The design can be short (a few sentences for truly simple projects), but you MUST present it and get approval.
 
-**Fast lane:** This anti-pattern does NOT apply — the fast lane exists precisely because for genuinely small, self-contained tasks (no API/schema change, no new infra, contained blast radius), the design ceremony costs more than it saves. The Lane Decision in `using-superpowers` already filtered out tasks that look small but aren't. If during fast-lane brainstorming you discover hidden complexity (new dependency, schema change, multi-file blast radius beyond the contained area), STOP and switch to the full lane.
+**Middle lane:** This anti-pattern does NOT apply — the user picked middle lane because the task slots into an existing pattern and there's no design judgment to make. The plan doc is the artifact; the design is the existing system. If you find yourself wanting to brainstorm, that's a signal a design fork has surfaced — stop and ask the user to reclassify to full lane.
+
+**Fast lane:** This anti-pattern does NOT apply — the fast lane exists precisely because for genuinely small, self-contained tasks (no API/schema change, no new infra, contained blast radius), the design ceremony costs more than it saves. If during fast-lane brainstorming you discover hidden complexity (new dependency, schema change, multi-file blast radius beyond the contained area), STOP and ask the user to reclassify.
 
 ## Checklist
 
@@ -161,14 +166,15 @@ Use this when `using-superpowers` selected the fast lane. The goal is to get to 
 
 ### When to bail out of the fast lane
 
-If during the mini-brainstorm you discover any of these, STOP and re-enter the full lane:
+If during the mini-brainstorm you discover any of these, STOP and ask the user to reclassify (do not pick yourself):
 
-- The change actually touches more files than you thought
-- There's a real design fork (e.g., two architectures with different long-term implications)
-- You need new infrastructure / a new dependency / a schema change
-- The user asks for a written spec or design doc
+- The change actually touches more files than you thought → likely middle lane
+- There's a real design fork (e.g., two architectures with different long-term implications) → full lane
+- You need new infrastructure / a new dependency → full lane
+- A schema change surfaces — pre-launch this is middle lane, post-launch it's full lane
+- The user asks for a written spec or design doc → full lane
 
-Switching lanes is cheap; over-committing to fast lane is expensive. Announce the switch ("Reclassifying to full lane — this is bigger than I first estimated") and run the full flow.
+Switching lanes is cheap; over-committing to fast lane is expensive. Surface the new scope to the user via AskUserQuestion ("This is bigger than fast lane — should we switch to middle or full?") and let them pick.
 
 ### What stays mandatory in the fast lane
 
