@@ -8,6 +8,11 @@
       "name": "superpowers-lite",
       "source": "./superpowers-lite",
       "description": "Lighter fork of obra/superpowers — adds a developer-picked fast/middle/full lane so each task gets right-sized planning ceremony, from inline TodoWrite to full design-doc + plan-doc + multi-subagent review"
+    },
+    {
+      "name": "superpowers-lite-teams",
+      "source": "./superpowers-lite-teams",
+      "description": "superpowers-lite with Agent Teams enabled by default — full lane routes through a team fitness check and runs parallel specialist execution when the plan benefits from it, falling back to subagent-driven serial execution otherwise. Requires Claude Code ≥ 2.1.32 with CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1."
     }
   ]
 }

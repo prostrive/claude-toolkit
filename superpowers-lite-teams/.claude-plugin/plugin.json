@@ -1,0 +1,17 @@
+{
+  "name": "superpowers-lite-teams",
+  "description": "superpowers-lite with Agent Teams enabled by default — full lane routes through a team fitness check and runs parallel specialist execution when the plan benefits from it, falling back to subagent-driven serial execution otherwise",
+  "version": "0.1.0",
+  "author": {
+    "name": "Claude Toolkit"
+  },
+  "license": "MIT",
+  "keywords": [
+    "skills",
+    "tdd",
+    "workflows",
+    "fast-path",
+    "agent-teams",
+    "parallel"
+  ]
+}

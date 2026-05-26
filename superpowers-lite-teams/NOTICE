@@ -1,0 +1,31 @@
+superpowers-lite-teams
+
+A combination of:
+
+1. superpowers-lite (this repo, ./superpowers-lite/) — itself a fork of
+   obra/superpowers (https://github.com/obra/superpowers) by Jesse Vincent,
+   adding a developer-picked fast/middle/full lane.
+
+2. superpowered-teams (https://github.com/narwhalishus/superpowered-teams)
+   by Bryan Yao — MIT-licensed. The two team skills
+   (writing-plans-for-teams, agent-team-driven-development) and the
+   code-reviewer agent were ported from that repo with minor edits to
+   rewrite namespace references for in-plugin use and to wire the full
+   lane through the team fitness check by default.
+
+   Copyright (c) 2026 Bryan Yao
+   Licensed under the MIT License — see the upstream LICENSE at
+   https://github.com/narwhalishus/superpowered-teams/blob/main/LICENSE
+
+Changes from upstream superpowered-teams:
+- All references to `superpowers:<skill>` rewritten to bare `<skill>` names
+  (those skills live inside this plugin).
+- All references to `superpowered-teams:code-reviewer` rewritten to
+  `superpowers-lite-teams:code-reviewer`.
+- The brainstorming skill's full-lane terminal-state instruction was
+  updated to invoke `writing-plans-for-teams` instead of `writing-plans`,
+  matching the integration the upstream documents via claude-md-snippet.md
+  but baking it directly into the skill rather than relying on a global
+  CLAUDE.md edit.
+- The using-superpowers skill's full-lane section calls out the teams
+  default and the experimental-flag prerequisite.
