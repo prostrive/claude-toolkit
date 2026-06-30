@@ -71,6 +71,16 @@ If during work you discover the task is bigger than the picked lane (hidden comp
 
 Downstream skills (`brainstorming`, `writing-plans`, `subagent-driven-development`, `test-driven-development`) read the lane and adjust their behavior.
 
+## House voice (every lane)
+
+Write code and comments the way the humans already in the repo do — match the surrounding file's comment density and tone. These machine-writing tells are banned in every lane:
+
+- **Tour-guide comments** — narrating what the code does step by step ("first… then…", "in one transaction: A, B, C"). The body below already says that; delete it. Keep only what the code *can't* say: a non-obvious invariant, a fail-closed reason, a lock ordering. A doc comment longer than the body it sits on is wrong.
+- **Speculative abstraction** — an interface, `*.strategy`, factory, or DI seam with one real implementation, added "to swap later." Write the concrete thing; add the seam when the second implementation arrives.
+- **Clever over clear** — if you can't say what a function does in one plain sentence, simplify the code instead of explaining it in a paragraph.
+
+A repo's AGENTS.md / CLAUDE.md style rules override this with specifics; when unsure, read three neighbouring files and imitate them.
+
 ## Instruction Priority
 
 Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:

@@ -43,6 +43,11 @@ Task tool (general-purpose):
     - Type safety where applicable?
     - DRY without premature abstraction?
     - Edge cases handled?
+    - Reads like a human on the team wrote it? Flag tour-guide comments that
+      narrate what the code does, doc comments longer than the code they annotate,
+      the same boilerplate phrasing reused across files, and clever constructs
+      where the plain version reads better. Treat these as Important, not Minor —
+      voice slop compounds, because the next change copies it as the house style.
 
     **Architecture:**
     - Sound design decisions?
