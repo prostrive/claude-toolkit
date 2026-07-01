@@ -13,6 +13,8 @@ description: Use when you have a spec or requirements for a multi-step task, bef
 
 **Fast lane:** skip the committed plan doc entirely. Use the **Fast-Lane TodoWrite Plan** section at the bottom of this skill — an in-conversation TodoWrite list, no markdown file, no self-review loop. Implementation begins immediately after the TodoWrite is created.
 
+**Full and middle lanes co-author the plan** — surface the judgment-bearing decisions to the developer and build the plan from their answers, rather than handing over a finished plan to approve. See **Co-Author the Decisions** below.
+
 If `using-superpowers` did not set a lane, return to `using-superpowers` and have the user pick. Do not pick yourself.
 
 ## Overview
@@ -29,6 +31,24 @@ Assume they are a skilled developer, but know almost nothing about our toolset o
 - (User preferences for plan location override this default)
 - (Middle lane: still save here, but use the short-plan structure — see bottom of skill)
 - (Fast lane: skip this — use a TodoWrite list instead, see bottom of skill)
+
+## Co-Author the Decisions (superpowers-lite)
+
+Applies to **full and middle lanes.** The plan is where the developer's judgment enters — or doesn't. Hand over a finished plan and it gets skimmed and rubber-stamped: the developer never makes its decisions, so nobody owns them and nobody holds a model of what shipped. So **don't emit a finished plan for sign-off. Build it by surfacing the judgment-bearing decisions to the developer and writing their answers in.**
+
+**Judgment-bearing = the calls a human must own, not you:** product / user-facing behavior, permission / security policy, data or shared-contract shape, money / ledger / financial behavior, and what's in or out of scope. If the repo codifies this (e.g. an `AGENTS.md` "cannot silently decide" list), that list is your definition — use it over this one.
+
+**Surface them in three tiers, so it never becomes a wall of questions:**
+
+- **Decide (ask):** a real call with genuine divergence. **Pose it through the structured question tool — `AskUserQuestion` — never as prose:** a discrete question whose text carries the real tradeoff (what each option actually costs), 2–4 options **laid out evenly — none pre-tagged "recommended," none favored by order.** There's no right answer here by definition, so don't hand over a verdict: a pushed recommendation anchors the developer and becomes a one-click rubber-stamp. If they want your lean, they ask for it — then give it, with reasoning. Batch a few independent decisions per call; another call if there are more. Never a "what do you think?" trailing a paragraph.
+- **Disclose (state, don't ask):** a call the repo's conventions already settle. State it and why in a line so they can veto — don't make them decide it.
+- **Default (silent):** everything mechanical — file paths, test structure, the obvious implementation. Decide it, write it in, never surface it.
+
+**The structured prompt is the whole point of the Decide tier.** A question buried in a paragraph is a rubber-stamp in disguise — the developer skims the blob and says "looks good"; a discrete prompt with options forces an actual choice. "You can't rubber-stamp a question" holds only when it's *posed as one.*
+
+Write each answer into the plan as you go. When the decisions are settled the plan already exists — as the record of what the developer decided — so **there is no separate "approve the plan" step; there's nothing left to rubber-stamp.**
+
+Guardrails: **zero** judgment-bearing decisions → nothing to co-author, just write the plan. A _pile_ of them on a small change → the change is too big or you've mis-tiered. Recheck before drowning the developer.
 
 ## Scope Check
 
@@ -173,7 +193,7 @@ Use this when `using-superpowers` selected the middle lane. The change is multi-
 
 1. **Quick context scan** — read the file(s) the task touches and any callers that affect the change. Skip broad project-wide exploration unless the call graph requires it.
 
-2. **Ask any genuinely needed clarifying questions** — middle lane skipped brainstorming, so this is your one chance. Batch them in one consolidated message via AskUserQuestion. Skip entirely if you have no real uncertainty.
+2. **Co-author the judgment-bearing decisions** — middle lane skipped brainstorming, so this is where the developer's calls get made. Surface them per **Co-Author the Decisions** above (decide / disclose / default) and write the answers into the short plan. Batch independent decisions into one AskUserQuestion; skip only if the change genuinely has none.
 
 3. **Write a one-screen plan doc** to `docs/superpowers/plans/YYYY-MM-DD-<topic>-plan.md`. Commit it. Structure:
 
@@ -255,6 +275,8 @@ Use this when `using-superpowers` selected the fast lane. The committed plan doc
 ### When to bail out of the fast lane
 
 If while writing the TodoWrite you find yourself with more than ~8 todos, or you notice the change is touching files you didn't expect, STOP. The task is bigger than fast-lane work. Ask the user via AskUserQuestion whether to reclassify to middle or full lane — do not pick yourself.
+
+That bail-out is about **size.** There's a second, independent trigger about **blast radius:** if the change carries a judgment-bearing decision — money / ledger, permission / security, data or shared-contract shape, product behavior, or what's in or out of scope — surface it via `AskUserQuestion` before deciding it (or bump to middle lane). A three-line permission or fee change is fast-lane by size but is exactly the call the developer must own. Fast lane drops *ceremony*, never the developer's ownership of those decisions.
 
 ### What stays mandatory
 
