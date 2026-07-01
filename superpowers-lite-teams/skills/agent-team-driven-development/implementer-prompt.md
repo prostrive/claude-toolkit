@@ -78,6 +78,18 @@ Agent tool:
     **While working:** If you hit something unexpected, send a SendMessage
     to the lead. Don't guess or assume about unclear requirements.
 
+    **Surface judgment-bearing decisions — even when you're sure.** Separate from
+    hitting something unexpected: even when you know exactly how you'd proceed, some
+    calls are the human's, not yours. If you hit a call the plan and the repo's
+    conventions haven't settled — money/ledger, permission/security, data or
+    shared-contract shape, product behavior, or scope; or an action tripwire (an
+    abstraction the plan didn't call for, a file the task didn't list or a protected
+    path, a fail-open/closed or throw-vs-return branch, a comment justifying *why* on
+    a money/auth path) — STOP, SendMessage the lead, and report Status: NEEDS_CONTEXT
+    with the options and what each costs, **no recommendation** (the lead surfaces it
+    to the human; if they want your lean, they'll ask). Follow settled calls; escalate
+    only the genuinely-open ones. Don't build ahead on a guess.
+
     ## Self-Review Checklist
 
     Before reporting, check:

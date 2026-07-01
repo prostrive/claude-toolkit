@@ -71,6 +71,35 @@ Task tool (general-purpose):
     The controller can provide more context, re-dispatch with a more capable model,
     or break the task into smaller pieces.
 
+    ## Surface Judgment-Bearing Decisions (even when you're sure)
+
+    The escalation above is about being *stuck*. This is different: even when you know
+    **exactly** how you'd proceed, some calls are the human's, not yours — confidence
+    doesn't make them your call. Before you write, STOP and report the decision up
+    (Status: NEEDS_CONTEXT) instead of implementing your preferred option, whenever you
+    hit a judgment-bearing call **the plan and the repo's conventions haven't already
+    settled**:
+
+    **Judgment-bearing categories** — money/ledger behavior, permission/security, data
+    or shared-contract shape, product/user-facing behavior, or anything that widens the
+    task's scope. (If the repo has an AGENTS.md "cannot silently decide" list, that wins.)
+
+    **Concrete action tripwires** — the tells that a decision is happening, catchable
+    mid-flow even when it doesn't feel like one:
+    - about to create an abstraction the plan didn't call for — a `*.strategy.ts` or
+      port, an `abstract class`, an `interface` with one implementation, a DI `Symbol`
+    - about to touch a file the task didn't list (scope creep), or a protected path
+      (shared contracts, DB migrations, permissions)
+    - about to write a fail-open vs fail-closed branch, or a throw-vs-return-on-error choice
+    - reaching for a comment that *justifies why* you picked something on a money or auth
+      path — if the code needs defending, it's a decision, not a mechanic
+
+    If the plan or a documented convention already settles the call, follow it — don't
+    escalate a settled decision. Escalate only the genuinely-open ones. When you do, lay
+    out the options and what each costs — **no recommendation, no "I'd do X"** (that just
+    anchors the human; if they want your lean, they'll ask). Then wait — don't build ahead
+    on a guess.
+
     ## Before Reporting Back: Self-Review
 
     Review your work with fresh eyes. Ask yourself:

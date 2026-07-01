@@ -117,7 +117,7 @@ For each Wave 1 task (up to 3 simultaneous):
 
 - **`report_ready: true`, `status_code: DONE`** → dispatch spec reviewer using `./spec-reviewer-prompt.md`. Don't wait for other teammates.
 - **`report_ready: true`, `status_code: DONE_WITH_CONCERNS`** → read `metadata.concerns` from task. Correctness/scope concern → address via `SendMessage` before dispatching reviewer. Observation → note and dispatch reviewer.
-- **`report_ready: true`, `status_code: NEEDS_CONTEXT`** → answer via `SendMessage`. Clear `metadata.report_ready` (set to `false` via `TaskUpdate metadata: {report_ready: null, ...}`). If the question reveals a real plan gap, update the plan file before continuing.
+- **`report_ready: true`, `status_code: NEEDS_CONTEXT`** → if it's missing *information*, answer via `SendMessage`. If it's a **judgment-bearing decision** (money/security/scope/contract/product — laid out as options with no recommendation), **surface it to the human via `AskUserQuestion` — don't answer it yourself** — then relay their choice via `SendMessage`. Either way, clear `metadata.report_ready` (set to `false` via `TaskUpdate metadata: {report_ready: null, ...}`). If the question reveals a real plan gap, update the plan file before continuing.
 - **`report_ready: true`, `status_code: BLOCKED`** → diagnose per rubric below. Never ignore.
 - **No `report_ready` flag** → message is informational (peer-summary echo, mid-work check-in). Do not dispatch a reviewer. If the message is a direct question to the lead, answer it; otherwise discard.
 

@@ -55,7 +55,7 @@ Even within the full lane, not every task needs both review stages. If ALL of th
 
 This applies per-task, not per-plan. A 10-task plan can have 7 reduced-ceremony tasks and 3 full two-stage tasks, depending on each task's profile.
 
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, ambiguity that genuinely prevents progress, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
+**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, a judgment-bearing decision an implementer surfaced for the human (see NEEDS_CONTEXT under Handling Implementer Status), ambiguity that genuinely prevents progress, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time — they asked you to execute the plan, so execute it.
 
 ## When to Use
 
@@ -153,7 +153,7 @@ Implementer subagents report one of four statuses. Handle each appropriately:
 
 **DONE_WITH_CONCERNS:** The implementer completed the work but flagged doubts. Read the concerns before proceeding. If the concerns are about correctness or scope, address them before review. If they're observations (e.g., "this file is getting large"), note them and proceed to review.
 
-**NEEDS_CONTEXT:** The implementer needs information that wasn't provided. Provide the missing context and re-dispatch.
+**NEEDS_CONTEXT:** The implementer needs something it couldn't supply itself. If it's missing *information* (a path, an interface, a dependency), provide it and re-dispatch. If it's a **judgment-bearing decision** (money/security/scope/contract/product — the implementer will have laid out options with no recommendation), **surface it to the human via AskUserQuestion — don't answer it yourself** — then re-dispatch with their answer. This is the during-build half of co-authoring: the plan surfaced the foreseeable calls; this catches the ones that only appear once code is being written.
 
 **BLOCKED:** The implementer cannot complete the task. Assess the blocker:
 1. If it's a context problem, provide more context and re-dispatch with the same model

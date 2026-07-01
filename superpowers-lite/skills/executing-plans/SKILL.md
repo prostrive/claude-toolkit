@@ -46,6 +46,8 @@ After all tasks complete and verified:
 
 **Ask for clarification rather than guessing.**
 
+**Also stop — even when you're *not* stuck — for judgment-bearing decisions.** Even when you know exactly how you'd proceed, if you hit a call the plan and the repo's conventions haven't settled — money/ledger, permission/security, data or shared-contract shape, product behavior, or scope; or an action tripwire (creating an abstraction the plan didn't call for, touching a file the plan didn't list or a protected path, a fail-open/closed or throw-vs-return branch, a comment that *justifies why* on a money/auth line) — surface it to your partner via `AskUserQuestion` first: options and what each costs, **no recommendation** (they'll ask if they want your lean). Confidence isn't ownership. Follow settled calls; surface only the genuinely-open ones.
+
 ## When to Revisit Earlier Steps
 
 **Return to Review (Step 1) when:**
