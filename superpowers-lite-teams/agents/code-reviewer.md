@@ -37,6 +37,11 @@ If any of these are missing, ask the dispatcher (the lead) for the missing piece
 - DRY without premature abstraction?
 - Edge cases handled?
 
+**Comment readability:**
+- Are comments plain sentences a human skims easily, not dense strings of backticked identifiers, arrows, and cross-references?
+- Do they explain why / non-obvious constraints instead of narrating what the code already shows?
+- Do any comments restate identifiers, call chains, or queue/file names the reader can already see, or run longer than the code they explain? (Minor.)
+
 **Architecture:**
 - Sound design decisions?
 - Reasonable scalability and performance?

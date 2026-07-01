@@ -204,6 +204,7 @@ After green only:
 - Remove duplication
 - Improve names
 - Extract helpers
+- Tighten comments — cut anything that restates the code; keep only the why/caveats, written as plain sentences. See @writing-readable-comments.md.
 
 Keep tests green. Don't add behavior.
 

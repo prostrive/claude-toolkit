@@ -83,6 +83,9 @@ Task tool (general-purpose):
     **Quality:**
     - Is this my best work?
     - Are names clear and accurate (match what things do, not how they work)?
+    - Are comments readable — plain sentences explaining why/caveats, not dense
+      strings of identifiers, arrows, and cross-references that restate what the
+      code already shows?
     - Is the code clean and maintainable?
 
     **Discipline:**
