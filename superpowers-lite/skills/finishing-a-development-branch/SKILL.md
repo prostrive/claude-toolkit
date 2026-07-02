@@ -120,14 +120,30 @@ git branch -d <feature-branch>
 
 #### Option 2: Push and Create PR
 
+**Before you push, write the rundown and get sign-off.** This is the cheap checkpoint — a bad call caught here costs nothing; caught after CI runs or in review, it costs a round-trip.
+
+1. **Generate the rundown** from the diff (`git diff <base>...HEAD`) — how you'd explain the change to a teammate in a huddle, not a spec:
+   - **Filenames in the lead** — each meaningful file, then what it does.
+   - **Casual but concrete.** Plain verbs and contractions (writes / fires / drops the cache), but name the *real* things — the actual key, table, event, function. **Never "it" / "the event" / "the write path"** — that vagueness is the tell, not the casual tone.
+   - **Flag the 2-3 real judgment calls** on a `Watch:` line (defaults picked, fail-open vs fail-closed, masking, scope). Wave off the rest as "standard <x>".
+   - Skip trivial/boilerplate files. Read it aloud — if it sounds like a spec or narrates step-by-step, rewrite it.
+
+   Shape:
+   > `<branch/ticket> — <one line: what changed and why>`
+   > `- <file.ts> — <what it does, with the real names>`
+   > `Flow: <one-line concrete data flow>`
+   > `Watch: <the 2-3 calls>. Rest's <the standard bits>.`
+
+2. **Require sign-off on the `Watch:` decisions before pushing.** The developer confirms, edits, or bails to fix. Don't push until they OK it.
+
+3. **Push and open the PR, reusing the signed-off rundown as the body:**
+
 ```bash
-# Push branch
 git push -u origin <feature-branch>
 
-# Create PR
 gh pr create --title "<title>" --body "$(cat <<'EOF'
-## Summary
-<2-3 bullets of what changed>
+## Rundown
+<the signed-off rundown from step 1>
 
 ## Test Plan
 - [ ] <verification steps>
@@ -135,7 +151,7 @@ EOF
 )"
 ```
 
-**Do NOT clean up worktree** — user needs it alive to iterate on PR feedback.
+4. **Then tear down the worktree (Step 6).** Once pushed, the branch lives on the remote — removing the worktree frees it to check out in the developer's main checkout / IDE like any normal branch. Leaving it alive is the blocker: it keeps the branch bound to a side folder the IDE isn't pointed at. (PR-feedback iteration: check the branch out in the main checkout.)
 
 #### Option 3: Keep As-Is
 
@@ -170,7 +186,7 @@ git branch -D <feature-branch>
 
 ### Step 6: Cleanup Workspace
 
-**Only runs for Options 1 and 4.** Options 2 and 3 always preserve the worktree.
+**Runs for Options 1, 2, and 4.** Only Option 3 (keep as-is) preserves the worktree. For Option 2 it runs *after* the push + PR succeed — the branch is safely on the remote, so removing the worktree just frees it to check out in the developer's main checkout / IDE.
 
 ```bash
 GIT_DIR=$(cd "$(git rev-parse --git-dir)" 2>/dev/null && pwd -P)
@@ -196,7 +212,7 @@ git worktree prune  # Self-healing: clean up any stale registrations
 | Option | Merge | Push | Keep Worktree | Cleanup Branch |
 |--------|-------|------|---------------|----------------|
 | 1. Merge locally | yes | - | - | yes |
-| 2. Create PR | - | yes | yes | - |
+| 2. Create PR | - | yes | no | - |
 | 3. Keep as-is | - | - | yes | - |
 | 4. Discard | - | - | - | yes (force) |
 
@@ -210,9 +226,9 @@ git worktree prune  # Self-healing: clean up any stale registrations
 - **Problem:** "What should I do next?" is ambiguous
 - **Fix:** Present exactly 4 structured options (or 3 for detached HEAD)
 
-**Cleaning up worktree for Option 2**
-- **Problem:** Remove worktree user needs for PR iteration
-- **Fix:** Only cleanup for Options 1 and 4
+**Leaving the worktree alive after Option 2**
+- **Problem:** The branch stays bound to a side worktree folder the developer's IDE isn't pointed at, so they can't easily review it — the blocker this fixes.
+- **Fix:** After the push + PR succeed, tear the worktree down (Step 6). The branch is on the remote; PR-feedback iteration happens by checking it out in the main checkout.
 
 **Deleting branch before removing worktree**
 - **Problem:** `git branch -d` fails because worktree still references the branch
@@ -246,6 +262,6 @@ git worktree prune  # Self-healing: clean up any stale registrations
 - Detect environment before presenting menu
 - Present exactly 4 options (or 3 for detached HEAD)
 - Get typed confirmation for Option 4
-- Clean up worktree for Options 1 & 4 only
+- Clean up worktree for Options 1, 2 & 4 (Option 2 only after push + PR succeed)
 - `cd` to main repo root before worktree removal
 - Run `git worktree prune` after removal
