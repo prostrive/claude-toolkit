@@ -370,6 +370,67 @@ Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix 
 
 Never fix bugs without a test.
 
+## Hardening a Diff's Tests (coverage evidence for a PR)
+
+The cycle above is per-feature and test-first. This is the complementary pass: given a diff, make the test suite read like a behavior spec and produce coverage evidence a reviewer can scan. Use it when hardening tests for a PR.
+
+Inputs first: the **ticket + acceptance criteria**, the **branch diff**, and the repo's **test conventions** (framework, helpers, verification commands). If the ticket isn't in hand, stop and ask — don't infer it from the branch name or commits. If the diff base is ambiguous, ask which branch to compare against.
+
+### 1. Scenario inventory (from the actual diff)
+
+List every added/changed production symbol — route, service method, DTO/schema, query, guard, mapper, side effect, event, job, external call. For each, enumerate the scenarios that matter:
+- happy path
+- validation boundaries
+- authorization / tenancy boundaries
+- missing / empty / null / stale / duplicate / revoked / concurrent state
+- persistence side effects; emitted events, queued jobs, files, external calls
+- integrated wiring where behavior depends on real DI / middleware / guards / routing
+
+Mark each **covered**, **needs an assertion**, or **intentional gap (with a reason)**. No silent gaps — every meaningful behavior the diff touches is covered or explicitly listed.
+
+### 2. Shape tests as behavior (BDD)
+
+Organize so the full `describe → describe → it` path reads as a plain-English rule:
+- Nest `describe` for state/preconditions (`when …`, `with …`, `without …`, `after …`).
+- Each `it` proves **one** outcome; keep its text short.
+- If an `it` needs `and` / `then` / `after` to describe itself, split it — another `describe` level, or a separate `it`. (`writes the membership`, then `after writing the membership → publishes a user invalidation` — never `writes … then publishes …`.)
+- Split examples that can fail for unrelated reasons.
+- Prefer integrated tests where behavior depends on real wiring; keep isolated tests only where they genuinely pin local behavior.
+
+### 3. Add the missing assertions — under TDD
+
+For each scenario worth automating, run the **Red-Green-Refactor** cycle above. Two hard rules specific to hardening:
+- **Never delete, skip, or loosen an existing assertion to get green.** If a test is genuinely wrong, explain why before you touch it.
+- If a new test exposes a real production bug, switch to `systematic-debugging`, prove the root cause, then fix under TDD — don't reflex-patch production.
+
+### 4. Scenario tree (the coverage evidence)
+
+A compact view of the resulting tests: one leaf per final `it`, indentation mirroring the `file → describe → nested describe → it` path, the exact `it` text in each leaf. Not a generic checklist — it shows the real scenario names so a reviewer sees what's covered without opening the file.
+
+```txt
+permission-mutation.service.spec.ts
+PermissionMutationService
+└─ adding a profile to a group
+   ├─ writes the membership
+   └─ after writing the membership
+      └─ publishes a user invalidation
+```
+
+Rules: filename first; preserve the exact nested `describe` order; one leaf per `it`; verbatim `it` text (no `it(...)` syntax); don't merge outcomes; put intentional gaps under a `gaps` branch marked `(gap — <reason>)`.
+
+### 5. Acceptance-criteria map
+
+Map every acceptance criterion to at least one tree leaf (or an explicit gap):
+
+```md
+- AC1: <criterion> → `events.test.ts → …schema → accepts → a user payload`
+- AC2: <criterion> → `events.test.ts → …schema → rejects → an empty tenantId`
+```
+
+### Verify, then deliver
+
+Run the focused tests, then the full relevant package/app suite, plus typecheck/lint if the repo expects them (see `verification-before-completion`). Capture the commands + output — no "done/passing" without evidence. Deliver: a summary of the test changes, the scenario tree + AC map, the verification output, and any explicit gaps with their manual-verification path.
+
 ## Testing Anti-Patterns
 
 When adding mocks or test utilities, read @testing-anti-patterns.md to avoid common pitfalls:
