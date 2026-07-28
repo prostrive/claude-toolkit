@@ -83,15 +83,9 @@ A repo's AGENTS.md / CLAUDE.md style rules override this with specifics; when un
 
 ## Domain context (every lane)
 
-Before your first substantive action on a task — in **every** lane, before brainstorming, planning, or coding — check for a domain glossary at the repo root:
+Before your first substantive action, check the repo root for `CONTEXT.md` (or `CONTEXT-MAP.md`, which points at per-context glossaries). If one exists, read it and use its canonical terms; terms under `_Avoid_` are banned. If neither exists, proceed — don't create one speculatively.
 
-- `CONTEXT.md` — the project's committed glossary. Read it.
-- `CONTEXT-MAP.md` — the repo has multiple contexts. Read it, then read the `CONTEXT.md` for the context your task lives in.
-- Neither exists — proceed. Don't create one speculatively.
-
-Then **use the canonical terms** it defines: in identifiers, comments, commit messages, spec and plan docs, and in conversation with the user. A term listed under `_Avoid_` is banned — if the glossary says say "Customer" and not "account", then you say Customer, even if the user just said account.
-
-This is a file read, not a skill invocation, and it costs you nothing. **Changing** the glossary is different — that requires the `domain-modeling` skill, and the lanes treat it differently (full: during design; middle: only when a concept is introduced or renamed; fast: never — it's a signal to reclassify).
+That's a file read, not a skill invocation. **Changing** the glossary requires the `domain-modeling` skill: full lane during design, middle lane only for a new or renamed concept, fast lane never (wanting a new term is a reclassify signal).
 
 ## Instruction Priority
 
