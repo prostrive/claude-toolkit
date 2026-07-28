@@ -19,6 +19,19 @@ Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model,
 
 All three lanes keep TDD and verification-before-completion mandatory. Lane reclassification mid-task goes back through AskUserQuestion.
 
+### Domain model (cross-lane)
+
+Skill `domain-modeling`, ported from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT), gives the plugin a persistent domain glossary so lanes stop re-deriving the project's vocabulary every session.
+
+The port keeps a hard split between **reading** and **maintaining**:
+
+- **Reading is a one-line habit in every lane.** `using-superpowers` tells all three lanes to read `CONTEXT.md` (or `CONTEXT-MAP.md`) before the first substantive action and to treat its canonical terms as binding — terms under `_Avoid_` are banned. No skill invocation, one file read.
+- **Maintaining requires the skill.** Full lane invokes it during brainstorming, before the spec doc is written. Middle lane invokes it only when a change introduces or renames a domain concept. Fast lane never invokes it — needing a new domain term is a bail-out signal to reclassify.
+
+Artifacts: `CONTEXT.md` (glossary only, no implementation details), `CONTEXT-MAP.md` (multi-context repos), `docs/adr/NNNN-slug.md` (decisions passing all three of hard-to-reverse / surprising / real trade-off). These sit alongside `docs/superpowers/specs/` and `docs/superpowers/plans/` — a spec goes stale when it ships, a glossary and an ADR don't.
+
+Subagent prompts (`implementer-prompt.md`, `code-quality-reviewer-prompt.md`) paste relevant glossary entries inline rather than linking them, since a fresh subagent has none of the conversation that produced the names.
+
 ## Plugin: superpowers-lite-teams
 
 Same as `superpowers-lite`, with two skills and one agent ported from [narwhalishus/superpowered-teams](https://github.com/narwhalishus/superpowered-teams) (MIT) and wired into the full lane by default.

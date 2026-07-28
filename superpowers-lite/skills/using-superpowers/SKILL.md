@@ -81,6 +81,18 @@ Write code and comments the way the humans already in the repo do — match the 
 
 A repo's AGENTS.md / CLAUDE.md style rules override this with specifics; when unsure, read three neighbouring files and imitate them.
 
+## Domain context (every lane)
+
+Before your first substantive action on a task — in **every** lane, before brainstorming, planning, or coding — check for a domain glossary at the repo root:
+
+- `CONTEXT.md` — the project's committed glossary. Read it.
+- `CONTEXT-MAP.md` — the repo has multiple contexts. Read it, then read the `CONTEXT.md` for the context your task lives in.
+- Neither exists — proceed. Don't create one speculatively.
+
+Then **use the canonical terms** it defines: in identifiers, comments, commit messages, spec and plan docs, and in conversation with the user. A term listed under `_Avoid_` is banned — if the glossary says say "Customer" and not "account", then you say Customer, even if the user just said account.
+
+This is a file read, not a skill invocation, and it costs you nothing. **Changing** the glossary is different — that requires the `domain-modeling` skill, and the lanes treat it differently (full: during design; middle: only when a concept is introduced or renamed; fast: never — it's a signal to reclassify).
+
 ## Instruction Priority
 
 Superpowers skills override default system prompt behavior, but **user instructions always take precedence**:

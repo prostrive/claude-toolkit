@@ -191,7 +191,9 @@ Use this when `using-superpowers` selected the middle lane. The change is multi-
 
 ### Process
 
-1. **Quick context scan** — read the file(s) the task touches and any callers that affect the change. Skip broad project-wide exploration unless the call graph requires it.
+1. **Quick context scan** — read the file(s) the task touches and any callers that affect the change, plus `CONTEXT.md` (or `CONTEXT-MAP.md`) if the repo has one. Skip broad project-wide exploration unless the call graph requires it.
+
+   Write the plan in the glossary's canonical terms — file responsibilities, step descriptions, and the names you're about to give things. Middle lane skips brainstorming, so this plan is the last place a naming mistake is cheap to fix. If the change **introduces or renames a domain concept**, invoke `domain-modeling` and settle it before step 3; otherwise just read and comply.
 
 2. **Co-author the judgment-bearing decisions** — middle lane skipped brainstorming, so this is where the developer's calls get made. Surface them per **Co-Author the Decisions** above (decide / disclose / default) and write the answers into the short plan. Batch independent decisions into one AskUserQuestion; skip only if the change genuinely has none.
 

@@ -16,6 +16,17 @@ Task tool (general-purpose):
 
     [Scene-setting: where this fits, dependencies, architectural context]
 
+    ## Domain Vocabulary
+
+    [If the repo has a CONTEXT.md / CONTEXT-MAP.md, paste the relevant glossary
+    entries here — don't just link the file. A fresh subagent has none of the
+    conversation that produced these names.]
+
+    Use these terms exactly, in identifiers, comments, and commit messages. Terms
+    listed under `_Avoid_` are banned. If the task seems to need a domain term that
+    isn't defined here, do NOT invent one — report back with Status: NEEDS_CONTEXT.
+    Naming a domain concept is the human's call.
+
     ## Before You Begin
 
     If you have questions about:

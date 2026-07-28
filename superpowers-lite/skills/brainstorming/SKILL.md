@@ -35,7 +35,7 @@ If `using-superpowers` did not set a lane, return to `using-superpowers` and hav
 
 You MUST create a task for each of these items and complete them in order:
 
-1. **Explore project context** — check files, docs, recent commits
+1. **Explore project context** — check files, docs, recent commits, and the domain glossary (`CONTEXT.md` / `CONTEXT-MAP.md`) if one exists
 2. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
 3. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
 4. **Propose relevant approaches** — with trade-offs and your recommendation
@@ -52,6 +52,8 @@ You MUST create a task for each of these items and complete them in order:
 **Understanding the idea:**
 
 - Check out the current project state first (files, docs, recent commits)
+- Read `CONTEXT.md` (or `CONTEXT-MAP.md`) if the repo has one, and hold the user to its vocabulary for the rest of the session. When the user's words and the glossary disagree, say so at the moment it happens — that disagreement is usually the most valuable thing in the conversation.
+- When a design surfaces a **new** domain concept, a **contested** term, or two words for one thing, invoke the `domain-modeling` skill and resolve it **before** you write the spec doc. A spec written in fuzzy vocabulary bakes the fuzziness into the plan, then into the identifiers, then into the code.
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
 - For appropriately-scoped projects, ask questions one at a time to refine the idea
@@ -153,7 +155,9 @@ Use this when `using-superpowers` selected the fast lane. The goal is to get to 
 
 ### Process
 
-1. **Quick context scan** — read the file(s) the task is about. Skip the broad project-wide exploration; the change is local, so the context that matters is local.
+1. **Quick context scan** — read the file(s) the task is about, plus `CONTEXT.md` if the repo has one (it's one file and it tells you what to call things). Skip the broad project-wide exploration; the change is local, so the context that matters is local.
+
+   Read the glossary; don't edit it. If the fast-lane change needs a domain term that doesn't exist yet, that's a bail-out signal — see below.
 
 2. **Produce one consolidated message** with up to three parts:
    - **(a) Clarifying questions** — only if genuinely needed. Batch them together (multiple choice preferred). If you don't have meaningful uncertainty, skip this part entirely.
@@ -172,6 +176,7 @@ If during the mini-brainstorm you discover any of these, STOP and ask the user t
 - There's a real design fork (e.g., two architectures with different long-term implications) → full lane
 - You need new infrastructure / a new dependency → full lane
 - A schema change surfaces — pre-launch this is middle lane, post-launch it's full lane
+- The change needs a domain term the glossary doesn't have, or contradicts one it does → middle lane at minimum. Don't mint vocabulary in the fast lane.
 - The user asks for a written spec or design doc → full lane
 
 Switching lanes is cheap; over-committing to fast lane is expensive. Surface the new scope to the user via AskUserQuestion ("This is bigger than fast lane — should we switch to middle or full?") and let them pick.

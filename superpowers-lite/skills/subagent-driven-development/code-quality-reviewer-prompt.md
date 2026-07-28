@@ -21,5 +21,6 @@ Task tool (general-purpose):
 - Are units decomposed so they can be understood and tested independently?
 - Is the implementation following the file structure from the plan?
 - Did this implementation create new files that are already large, or significantly grow existing files? (Don't flag pre-existing file sizes — focus on what this change contributed.)
+- If the repo has a `CONTEXT.md` / `CONTEXT-MAP.md`: do the new identifiers, comments, and commit messages use its canonical terms? Flag any use of a term listed under `_Avoid_`, and any new domain concept named without a corresponding glossary entry.
 
 **Code reviewer returns:** Strengths, Issues (Critical/Important/Minor), Assessment
