@@ -70,6 +70,16 @@ Rules:
 - If the developer can't answer a question about their own diff, that's a
   finding, not a gotcha — point at the exact lines and help them figure out
   whether the code is right.
+- **"I don't know" doesn't fail the quiz, but it doesn't advance it either.**
+  Explain the answer, then ask a follow-up variant your explanation doesn't
+  literally contain — the developer has to say it back in their own words.
+  Explain → re-ask → wait. Never answer your own question and move on in the
+  same breath.
+- **Critical-domain questions must be answered by the human.** A question
+  touching tenant scoping, permissions, money math, migrations, or audit
+  writes cannot be resolved by you explaining it once; it stays open until the
+  developer's own answer shows they understand it. Open critical questions
+  block a Ready verdict.
 
 ## Step 4 — DoD and convention scan (you verify, don't ask)
 
@@ -97,13 +107,20 @@ never tell the developer to go read them.
 
 ## Step 5 — Verdict
 
+The verdict covers two independent things: the code and the developer's
+understanding of it. Both must pass.
+
 End with one of:
 
-- **Ready** — one line on why, then write the rundown yourself (`Flow:` +
-  `Watch:` lines naming the 2–3 real judgment calls) and present it for the
-  developer's sign-off on the `Watch:` calls. The signed-off rundown becomes
-  the PR body.
-- **Not ready** — the specific gaps as a short list, each pointing at a file
-  or an unanswered question. No padding.
+- **Ready** — only when the scan is clean AND the developer answered the
+  critical-domain questions themselves. One line on why, then write the
+  rundown yourself (`Flow:` + `Watch:` lines naming the 2–3 real judgment
+  calls) and present it for the developer's sign-off on the `Watch:` calls.
+  The signed-off rundown becomes the PR body.
+- **Not ready (code)** — the specific gaps as a short list, each pointing at a
+  file or a failing check. No padding.
+- **Not ready (comprehension)** — the code may be fine, but critical-domain
+  questions are still open. List them and continue the explain → re-ask loop.
+  Never talk yourself into Ready by answering them on the developer's behalf.
 
 Do not open the PR yourself unless the developer asks.
