@@ -123,7 +123,7 @@ Vague name, tests mock not code
 
 **Requirements:**
 - One behavior
-- Clear name
+- Clear name, nested per **Shape Tests as Behavior** below
 - Real code (no mocks unless unavoidable)
 
 ### Verify RED - Watch It Fail
@@ -218,6 +218,70 @@ Next failing test for next feature.
 | **Minimal** | One thing. "and" in name? Split it. | `test('validates email and domain and whitespace')` |
 | **Clear** | Name describes behavior | `test('test1')` |
 | **Shows intent** | Demonstrates desired API | Obscures what code should do |
+
+## Shape Tests as Behavior (BDD)
+
+Applies to every test you write, not just a hardening pass. Organize so the full
+`describe → describe → it` path reads as a plain-English rule:
+
+- Nest `describe` for state/preconditions (`when …`, `with …`, `without …`, `after …`).
+- Each `it` proves **one** outcome; keep its text short.
+- If an `it` needs `and` / `then` / `after` to describe itself, split it — another `describe` level, or a separate `it`. (`writes the membership`, then `after writing the membership → publishes a user invalidation` — never `writes … then publishes …`.)
+- Split examples that can fail for unrelated reasons.
+- Prefer integrated tests where behavior depends on real wiring; keep isolated tests only where they genuinely pin local behavior.
+
+<Good>
+```typescript
+describe('PermissionMutationService', () => {
+  describe('adding a profile to a group', () => {
+    it('writes the membership', ...);
+
+    describe('after writing the membership', () => {
+      it('publishes a user invalidation', ...);
+    });
+  });
+});
+```
+Each level adds a real precondition; each leaf is one outcome
+</Good>
+
+<Bad>
+```typescript
+describe('PermissionMutationService', () => {
+  it('writes the membership and publishes a user invalidation', ...);
+});
+```
+Two outcomes in one example — it can fail for unrelated reasons
+</Bad>
+
+**Nest on real preconditions only.** A level that restates the level above it, or that
+wraps a single precondition in three, is ceremony — it makes the report longer without
+making it clearer. If you can't say what state a `describe` introduces, drop it.
+
+### Playwright
+
+A Playwright test has no nested `it`, so the tree is built differently:
+
+- Preconditions → nested `test.describe` (`unauthenticated`, `as an admin`).
+- Distinct phases **inside one test** → `test.step`, and only where the test genuinely
+  has more than one phase or asserts more than one outcome. Use it when a single real
+  action (a login attempt, a rate-limited request) can't be repeated per example without
+  fighting the app.
+- One outcome per step, same as one outcome per `it`.
+
+<Good>
+```typescript
+test.describe('unauthenticated', () => {
+  test('an invalid password is rejected', async ({ page }) => {
+    await attemptLogin(page, 'definitely-wrong-password');
+
+    await test.step('stays on the login page', async () => { ... });
+    await test.step('shows the incorrect-credentials message', async () => { ... });
+  });
+});
+```
+One real login attempt, each outcome its own named step
+</Good>
 
 ## Why Order Matters
 
@@ -352,6 +416,7 @@ Before marking work complete:
 - [ ] Output pristine (no errors, warnings)
 - [ ] Tests use real code (mocks only if unavoidable)
 - [ ] Edge cases and errors covered
+- [ ] Each `describe → it` path reads as a plain-English rule; no `and` in an `it` text
 
 Can't check all boxes? You skipped TDD. Start over.
 
@@ -390,12 +455,9 @@ Mark each **covered**, **needs an assertion**, or **intentional gap (with a reas
 
 ### 2. Shape tests as behavior (BDD)
 
-Organize so the full `describe → describe → it` path reads as a plain-English rule:
-- Nest `describe` for state/preconditions (`when …`, `with …`, `without …`, `after …`).
-- Each `it` proves **one** outcome; keep its text short.
-- If an `it` needs `and` / `then` / `after` to describe itself, split it — another `describe` level, or a separate `it`. (`writes the membership`, then `after writing the membership → publishes a user invalidation` — never `writes … then publishes …`.)
-- Split examples that can fail for unrelated reasons.
-- Prefer integrated tests where behavior depends on real wiring; keep isolated tests only where they genuinely pin local behavior.
+Apply **Shape Tests as Behavior** above to the whole suite under review, not only the
+examples you add — a hardening pass is where a flat `describe` block with `and` in its
+`it` texts gets restructured into a readable tree.
 
 ### 3. Add the missing assertions — under TDD
 
