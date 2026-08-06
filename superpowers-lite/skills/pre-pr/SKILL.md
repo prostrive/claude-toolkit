@@ -124,3 +124,26 @@ End with one of:
   Never talk yourself into Ready by answering them on the developer's behalf.
 
 Do not open the PR yourself unless the developer asks.
+
+## Step 6 — Record the sign-off
+
+Only after the developer has signed off on the `Watch:` calls, and only on a
+**Ready** verdict, record it:
+
+```bash
+GIT_DIR_PATH=$(git rev-parse --git-dir)
+find "$GIT_DIR_PATH" -maxdepth 1 -name 'pre-pr-ok-*' -delete
+touch "$GIT_DIR_PATH/pre-pr-ok-$(git rev-parse HEAD)"
+```
+
+(`find` rather than `rm` with a glob: under zsh an unmatched glob is an error
+that would abort the line before the marker is written.)
+
+A `PreToolUse` hook shipped with this plugin refuses `gh pr create` until that
+marker exists for the exact commit being shipped, so a branch can't reach a PR
+without going through this skill. The marker is tied to the commit — one more
+commit and the quiz happens again against the new diff.
+
+Never run this ahead of the sign-off, and never on a Not-ready verdict.
+Recording a sign-off the developer didn't give is worse than having no gate,
+because everyone downstream now believes the branch was checked.

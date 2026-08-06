@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# PreToolUse hook: hold `gh pr create` until the pre-pr sign-off is on record
+# for the exact commit being shipped.
+#
+# The pre-pr skill writes <git-dir>/pre-pr-ok-<sha> once the developer has
+# signed off on the rundown. Another commit invalidates it, so the gate can't
+# be satisfied once at the start of a branch and coasted on.
+#
+# This runs on every Bash call, so it fails open on anything it can't decide —
+# a gate that wedges a session gets ripped out, and then nothing is enforced.
+
+set -uo pipefail
+
+allow() { exit 0; }
+
+payload=$(cat 2>/dev/null) || allow
+
+# Substring match on the raw payload instead of parsing JSON, so the hook has
+# no jq dependency. A false positive costs one extra message; a missing jq on
+# a teammate's machine would silently disable the gate.
+case "$payload" in
+    *"gh pr create"* | *"gh pr ready"*) ;;
+    *) allow ;;
+esac
+
+[ "${SKIP_PRE_PR_GATE:-}" = "1" ] && allow
+
+git_dir=$(git rev-parse --git-dir 2>/dev/null) || allow
+[ -n "$git_dir" ] || allow
+head_sha=$(git rev-parse HEAD 2>/dev/null) || allow
+
+[ -f "${git_dir}/pre-pr-ok-${head_sha}" ] && allow
+
+short_sha="${head_sha:0:8}"
+reason="Pre-PR gate: no sign-off is recorded for commit ${short_sha}.\n\nInvoke the 'pre-pr' skill and take the developer through the quiz and the rundown sign-off. Recording the sign-off is the last step of that skill.\n\nDo NOT create the marker file yourself. A sign-off the developer did not give is worse than no gate at all. If the developer waives the check deliberately, they can re-run the command with SKIP_PRE_PR_GATE=1."
+
+printf '{\n  "hookSpecificOutput": {\n    "hookEventName": "PreToolUse",\n    "permissionDecision": "deny",\n    "permissionDecisionReason": "%s"\n  }\n}\n' "$reason"
+
+exit 0

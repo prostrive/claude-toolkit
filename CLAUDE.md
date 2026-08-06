@@ -19,6 +19,14 @@ Fork of `obra/superpowers`. Same skills, same SessionStart-hook injection model,
 
 All three lanes keep TDD and verification-before-completion mandatory. Lane reclassification mid-task goes back through AskUserQuestion.
 
+### The pre-PR gate
+
+`hooks/pre-pr-gate` is a `PreToolUse` hook on `Bash`. It denies `gh pr create` and `gh pr ready` unless `<git-dir>/pre-pr-ok-<HEAD-sha>` exists — the marker the `pre-pr` skill writes after the developer signs off on the rundown. Tying it to the commit sha means the quiz has to run against the diff that's actually shipping, not the one from three commits ago.
+
+It fails open on everything it can't decide (not a git repo, unreadable payload, no HEAD) — it runs on every Bash call, and a gate that wedges a session gets uninstalled. `SKIP_PRE_PR_GATE=1` is the deliberate escape hatch.
+
+It only binds developers who have this plugin installed and hooks enabled, so treat it as a reminder at the right moment, not as the rule. The rule belongs in CI, on the PR.
+
 ## Plugin: superpowers-lite-teams
 
 Same as `superpowers-lite`, with two skills and one agent ported from [narwhalishus/superpowered-teams](https://github.com/narwhalishus/superpowered-teams) (MIT) and wired into the full lane by default.
